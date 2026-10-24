@@ -55,5 +55,29 @@ func CreateTables() error {
 		`,
 	)
 
+	if err != nil {
+		return fmt.Errorf("database: create 'refresh_tokens' table error: %w", err)
+	}
+
+	_, err = DB.Exec(
+		context.Background(),
+		`
+		CREATE TABLE IF NOT EXISTS api_keys (
+		    id BIGSERIAL PRIMARY KEY,
+		    title TEXT NOT NULL,
+		    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+		    key_hash TEXT NOT NULL UNIQUE,
+		    expires_at TIMESTAMPTZ DEFAULT NULL,
+		    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+		    UNIQUE (title, user_id)
+		);
+		`,
+	)
+
+	if err != nil {
+		return fmt.Errorf("database: create 'api_keys' table error: %w", err)
+	}
+
 	return nil
 }

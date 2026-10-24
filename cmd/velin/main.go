@@ -10,7 +10,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/velin-ai/velin/internal/admin/config"
+	apikey "github.com/velin-ai/velin/internal/api/handlers/api_key"
 	"github.com/velin-ai/velin/internal/api/handlers/auth"
+	"github.com/velin-ai/velin/internal/api/middlewares"
 	"github.com/velin-ai/velin/internal/store"
 	"github.com/zalando/go-keyring"
 	"golang.org/x/crypto/bcrypt"
@@ -162,6 +164,20 @@ func main() {
 
 		// POST /api/v1/auth/refresh
 		r.Post("/auth/refresh", auth.RefreshHandler)
+
+		// POST /api/v1/api-key
+		r.With(
+			middlewares.Auth,
+		).Post(
+			"/api-key", apikey.CreateNewAPIKeyHandler,
+		)
+
+		// GET /api/v1/api-keys
+		r.With(
+			middlewares.Auth,
+		).Get(
+			"/api-keys", apikey.ListMyAPIKeys,
+		)
 	})
 
 	apiServer := &http.Server{
