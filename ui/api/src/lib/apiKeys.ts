@@ -25,6 +25,10 @@ export type CreateAPIKeyResult = {
   apiKey?: string
 }
 
+export type DeleteAPIKeyResult = {
+  status: number
+}
+
 function authHeaders(): Record<string, string> {
   const token = getAccessToken()
 
@@ -77,5 +81,16 @@ export async function createAPIKey(
   return {
     status: response.status,
     apiKey: data.api_key,
+  }
+}
+
+export async function deleteAPIKey(id: number): Promise<DeleteAPIKeyResult> {
+  const response = await fetch(`/api/v1/api-key/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+
+  return {
+    status: response.status,
   }
 }

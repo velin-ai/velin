@@ -166,6 +166,7 @@ All API routes are prefixed with `/api/v1`.
 | `POST` | `/auth/login` | Public | Sign in and receive access and refresh tokens |
 | `POST` | `/auth/refresh` | Public | Rotate a refresh token and issue a new access token |
 | `POST` | `/api-key` | JWT | Create an API key |
+| `DELETE` | `/api-key/{id}` | JWT | Delete one of your API keys |
 | `GET` | `/api-keys` | JWT | List your API keys |
 | `POST` | `/chats` | JWT | Create a chat |
 | `GET` | `/chats` | JWT | List your chats |

@@ -6,9 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/velin-ai/velin/internal/api/middlewares"
 	"github.com/velin-ai/velin/internal/api/models"
@@ -215,5 +217,74 @@ func ListMyAPIKeys(
 
 	json.NewEncoder(w).Encode(map[string]any{
 		"api_keys": apiKeys,
+	})
+}
+
+func DeleteAPIKey(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	w.Header().Set("Content-Type", "application/json")
+
+	claims, ok := middlewares.ClaimsFromContext(r.Context())
+
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+
+		json.NewEncoder(w).Encode(map[string]any{
+			"error": "unauthorized",
+		})
+
+		return
+	}
+
+	apiKeyID, err := strconv.ParseInt(
+		chi.URLParam(r, "id"), 10, 64,
+	)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+
+		json.NewEncoder(w).Encode(map[string]any{
+			"error": "invalid_api_key_id",
+		})
+
+		return
+	}
+
+	tag, err := store.DB.Exec(
+		r.Context(),
+		`
+		DELETE FROM api_keys
+		WHERE id = $1 AND user_id = $2;
+		`,
+		apiKeyID,
+		claims.UserID,
+	)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+
+		json.NewEncoder(w).Encode(map[string]any{
+			"error": "database_error",
+		})
+
+		return
+	}
+
+	if tag.RowsAffected() == 0 {
+		w.WriteHeader(http.StatusNotFound)
+
+		json.NewEncoder(w).Encode(map[string]any{
+			"error": "api_key_not_found",
+		})
+
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"message": "api_key_deleted",
 	})
 }

@@ -7,6 +7,7 @@ import {
 import { useI18n } from '../../i18n/context'
 import {
   createAPIKey,
+  deleteAPIKey,
   listAPIKeys,
   type APIKey,
 } from '../../lib/apiKeys'
@@ -35,6 +36,10 @@ function ApiKeys() {
   const [createError, setCreateError] = useState('')
   const [newKey, setNewKey] = useState('')
   const [copied, setCopied] = useState(false)
+
+  const [confirmingId, setConfirmingId] = useState<number | null>(null)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [deleteError, setDeleteError] = useState('')
 
   const loadKeys = useCallback(async () => {
     try {
@@ -119,6 +124,34 @@ function ApiKeys() {
       setCreateError('dashboard.apiKeys.errors.serverUnreachable')
     } finally {
       setCreating(false)
+    }
+  }
+
+  async function handleDelete(id: number) {
+    setDeletingId(id)
+    setDeleteError('')
+
+    try {
+      const result = await deleteAPIKey(id)
+
+      if (result.status === 401) {
+        redirectToLogin()
+
+        return
+      }
+
+      if (result.status !== 200 && result.status !== 404) {
+        setDeleteError('dashboard.apiKeys.errors.deleteFailed')
+
+        return
+      }
+
+      setApiKeys((keys) => keys.filter((apiKey) => apiKey.id !== id))
+      setConfirmingId(null)
+    } catch {
+      setDeleteError('dashboard.apiKeys.errors.serverUnreachable')
+    } finally {
+      setDeletingId(null)
     }
   }
 
@@ -213,6 +246,12 @@ function ApiKeys() {
         </div>
       ) : null}
 
+      {deleteError ? (
+        <p className="form-error" role="alert">
+          {t(deleteError)}
+        </p>
+      ) : null}
+
       {loading ? (
         <p className="keys-message">{t('dashboard.apiKeys.list.loading')}</p>
       ) : error ? (
@@ -251,13 +290,55 @@ function ApiKeys() {
                   <p className="key-meta">{meta}</p>
                 </div>
 
-                <span
-                  className={expired ? 'key-state is-expired' : 'key-state'}
-                >
-                  {expired
-                    ? t('dashboard.apiKeys.list.expired')
-                    : t('dashboard.apiKeys.list.active')}
-                </span>
+                <div className="key-row-actions">
+                  <span
+                    className={expired ? 'key-state is-expired' : 'key-state'}
+                  >
+                    {expired
+                      ? t('dashboard.apiKeys.list.expired')
+                      : t('dashboard.apiKeys.list.active')}
+                  </span>
+
+                  {confirmingId === apiKey.id ? (
+                    <>
+                      <button
+                        className="key-delete is-confirming"
+                        type="button"
+                        disabled={deletingId === apiKey.id}
+                        onClick={() => void handleDelete(apiKey.id)}
+                      >
+                        {deletingId === apiKey.id
+                          ? t('dashboard.apiKeys.list.deleting')
+                          : t('dashboard.apiKeys.list.deleteConfirm')}
+                      </button>
+                      <button
+                        className="key-cancel"
+                        type="button"
+                        disabled={deletingId === apiKey.id}
+                        onClick={() => {
+                          setConfirmingId(null)
+                          setDeleteError('')
+                        }}
+                      >
+                        {t('dashboard.apiKeys.list.cancel')}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="key-delete"
+                      type="button"
+                      aria-label={t('dashboard.apiKeys.list.deleteAria', {
+                        title: apiKey.title,
+                      })}
+                      onClick={() => {
+                        setConfirmingId(apiKey.id)
+                        setDeleteError('')
+                      }}
+                    >
+                      {t('dashboard.apiKeys.list.delete')}
+                    </button>
+                  )}
+                </div>
               </li>
             )
           })}

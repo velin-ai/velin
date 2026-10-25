@@ -166,6 +166,7 @@ Tüm API rotaları `/api/v1` önekiyle başlar.
 | `POST` | `/auth/login` | Herkese açık | Giriş yapar; erişim ve refresh jetonları döner |
 | `POST` | `/auth/refresh` | Herkese açık | Refresh jetonunu döndürür ve yeni erişim jetonu verir |
 | `POST` | `/api-key` | JWT | API anahtarı oluşturur |
+| `DELETE` | `/api-key/{id}` | JWT | API anahtarlarınızdan birini siler |
 | `GET` | `/api-keys` | JWT | API anahtarlarınızı listeler |
 | `POST` | `/chats` | JWT | Sohbet oluşturur |
 | `GET` | `/chats` | JWT | Sohbetlerinizi listeler |

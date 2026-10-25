@@ -136,7 +136,8 @@
         "invalidInput": "Başlık veya bitiş tarihini kontrol edin.",
         "createFailed": "Anahtar oluşturulamadı. Tekrar deneyin.",
         "serverUnreachable": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin.",
-        "loadFailed": "Anahtarlar yüklenemedi. Tekrar deneyin."
+        "loadFailed": "Anahtarlar yüklenemedi. Tekrar deneyin.",
+        "deleteFailed": "Anahtar silinemedi. Tekrar deneyin."
       },
       "reveal": {
         "title": "Yeni anahtar oluşturuldu",
@@ -152,7 +153,12 @@
         "active": "Etkin",
         "expired": "Süresi doldu",
         "meta": "Oluşturuldu {created}, bitiş {expires}",
-        "metaNoExpiry": "Oluşturuldu {created}, süresiz"
+        "metaNoExpiry": "Oluşturuldu {created}, süresiz",
+        "delete": "Sil",
+        "deleteConfirm": "Silmeyi onayla",
+        "deleting": "Siliniyor…",
+        "cancel": "Vazgeç",
+        "deleteAria": "{title} anahtarını sil"
       }
     },
     "settings": {

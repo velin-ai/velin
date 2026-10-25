@@ -184,6 +184,13 @@ func main() {
 			"/api-key", apikey.CreateNewAPIKeyHandler,
 		)
 
+		// DELETE /api/v1/api-key/{id}
+		r.With(
+			middlewares.Auth,
+		).Delete(
+			"/api-key/{id}", apikey.DeleteAPIKey,
+		)
+
 		// GET /api/v1/api-keys
 		r.With(
 			middlewares.Auth,

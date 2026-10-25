@@ -136,7 +136,8 @@
         "invalidInput": "Check the title and expiry date.",
         "createFailed": "Could not create the key. Please try again.",
         "serverUnreachable": "Could not reach the server. Check your connection.",
-        "loadFailed": "Could not load keys. Try again."
+        "loadFailed": "Could not load keys. Try again.",
+        "deleteFailed": "Could not delete the key. Please try again."
       },
       "reveal": {
         "title": "New key created",
@@ -152,7 +153,12 @@
         "active": "Active",
         "expired": "Expired",
         "meta": "Created {created}, expires {expires}",
-        "metaNoExpiry": "Created {created}, no expiry"
+        "metaNoExpiry": "Created {created}, no expiry",
+        "delete": "Delete",
+        "deleteConfirm": "Confirm delete",
+        "deleting": "Deleting…",
+        "cancel": "Cancel",
+        "deleteAria": "Delete key {title}"
       }
     },
     "settings": {
