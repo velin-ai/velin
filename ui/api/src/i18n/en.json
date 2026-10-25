@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "title": "Velin — Your AI Homelab"
+  },
+  "common": {
+    "brandTagline": "Your AI Homelab",
+    "homeLink": "Velin home",
+    "home": "Home",
+    "logOut": "Log out",
+    "copyright": "© 2026 Velin"
+  },
+  "home": {
+    "skipToContent": "Skip to content",
+    "nav": {
+      "label": "Main menu",
+      "howItWorks": "How it works",
+      "infrastructure": "Infrastructure",
+      "logIn": "Log in"
+    },
+    "hero": {
+      "title": "Run AI chat on your own infrastructure.",
+      "lede": "Velin brings accounts, API keys and chat history together in one place. Model calls go through Ollama, so your data never leaves your server.",
+      "createAccount": "Create account",
+      "howItWorks": "How it works"
+    },
+    "example": {
+      "label": "Example API request and response",
+      "response": "response",
+      "message": "Hello",
+      "answer": "Hello! How can I help you?",
+      "hiddenAnswer": "Example response: {answer}"
+    },
+    "steps": {
+      "title": "Your first reply in three steps",
+      "lede": "Open your account, create a key and send your first message.",
+      "oneTitle": "Create an account",
+      "oneBody": "Choose a username and password. Sessions are managed with short-lived JWTs and separate refresh tokens.",
+      "twoTitle": "Create an API key",
+      "twoBody": "Create a key for live or test use. It is shown only once and stored in the database as a SHA-256 hash.",
+      "threeTitle": "Send a message",
+      "threeBody": "Open a chat and send your message. The last 20 messages are sent to the model as context, and the reply is saved to your chat history."
+    },
+    "infrastructure": {
+      "title": "Your data stays on your server.",
+      "body": "Messages are stored in PostgreSQL and model calls go directly to Ollama on your server. Every request carries only your own chat history; no one else's data is accessible.",
+      "specs": {
+        "server": "Server",
+        "data": "Data",
+        "model": "Model",
+        "identity": "Identity",
+        "identityValue": "JWT and API key"
+      }
+    },
+    "footerNote": "Your AI Homelab."
+  },
+  "auth": {
+    "tagline": "Your AI Homelab",
+    "note": "Accounts, API keys and chat history in one place. Your data stays on your own server.",
+    "specs": {
+      "session": "Session",
+      "sessionValue": "JWT, 30 minutes",
+      "refresh": "Refresh",
+      "refreshValue": "30 days",
+      "key": "API key"
+    },
+    "login": {
+      "title": "Welcome back.",
+      "lede": "Sign in to your account; your API keys and chats are waiting.",
+      "notice": "Your account has been created. You can sign in now.",
+      "switchText": "Don't have an account?",
+      "switchLink": "Create one"
+    },
+    "register": {
+      "title": "Create your account.",
+      "lede": "Open an account to create your first API key. No setup required.",
+      "switchText": "Already have an account?",
+      "switchLink": "Sign in"
+    },
+    "form": {
+      "username": "Username",
+      "password": "Password",
+      "show": "Show",
+      "hide": "Hide",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "loginSubmit": "Sign in",
+      "loginLoading": "Signing in…",
+      "registerSubmit": "Create account",
+      "registerLoading": "Creating account…",
+      "loginSecurity": "Sessions are protected with short-lived JWTs.",
+      "registerSecurity": "Your password is hashed with bcrypt and never stored in plain text.",
+      "errors": {
+        "invalidCredentials": "Incorrect username or password.",
+        "required": "Username and password are required.",
+        "loginFailed": "Could not sign in. Please try again.",
+        "userExists": "This username is already taken.",
+        "usernameTooLong": "Username can be at most 20 characters.",
+        "registerFailed": "Could not create your account. Please try again.",
+        "serverUnreachable": "Could not reach the server. Check your connection."
+      }
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "label": "Dashboard menu",
+      "overview": "Overview",
+      "apiKeys": "API Keys",
+      "settings": "Settings"
+    },
+    "overview": {
+      "title": "Overview",
+      "lede": "Your session is active. You will manage API keys and chats from this panel.",
+      "action": "Manage API keys",
+      "specs": {
+        "session": "Session",
+        "sessionValue": "JWT, 30 minutes",
+        "refresh": "Refresh",
+        "refreshValue": "30 days",
+        "storage": "Storage",
+        "storageValue": "In this browser"
+      }
+    },
+    "apiKeys": {
+      "title": "API keys",
+      "lede": "Create keys to access the chat API. A key is shown only once, when it is created.",
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "Production server",
+        "expires": "Expires (optional)",
+        "submit": "Create key",
+        "submitting": "Creating…"
+      },
+      "errors": {
+        "titleRequired": "Enter a title for the key.",
+        "titleExists": "A key with this title already exists.",
+        "invalidInput": "Check the title and expiry date.",
+        "createFailed": "Could not create the key. Please try again.",
+        "serverUnreachable": "Could not reach the server. Check your connection.",
+        "loadFailed": "Could not load keys. Try again."
+      },
+      "reveal": {
+        "title": "New key created",
+        "note": "Copy this key now. It will not be shown again.",
+        "close": "Close",
+        "copy": "Copy",
+        "copied": "Copied"
+      },
+      "list": {
+        "loading": "Loading keys…",
+        "empty": "No keys yet. Create your first key above.",
+        "retry": "Try again",
+        "active": "Active",
+        "expired": "Expired",
+        "meta": "Created {created}, expires {expires}",
+        "metaNoExpiry": "Created {created}, no expiry"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "lede": "Manage how Velin works for you.",
+      "language": {
+        "title": "Language",
+        "description": "Choose the language used across the interface.",
+        "en": "English",
+        "tr": "Türkçe"
+      }
+    }
+  }
+}

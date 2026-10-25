@@ -1,14 +1,18 @@
+import { useI18n } from '../i18n/context'
 import AuthForm from './AuthForm'
 import AuthLayout from './AuthLayout'
 
 function Register() {
+  const { t } = useI18n()
+
   return (
     <AuthLayout
-      title="Hesabınızı oluşturun."
-      lede="İlk API anahtarınızı üretmek için bir hesap açın. Kurulum gerekmez."
+      title={t('auth.register.title')}
+      lede={t('auth.register.lede')}
       footer={
         <p className="auth-switch">
-          Zaten hesabınız var mı? <a href="/login">Giriş yapın</a>
+          {t('auth.register.switchText')}{' '}
+          <a href="/login">{t('auth.register.switchLink')}</a>
         </p>
       }
     >

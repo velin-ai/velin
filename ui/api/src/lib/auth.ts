@@ -52,3 +52,16 @@ export async function loginUser(username: string, password: string) {
 
   return result
 }
+
+export function getAccessToken() {
+  return window.localStorage.getItem(ACCESS_TOKEN_KEY)
+}
+
+export function getRefreshToken() {
+  return window.localStorage.getItem(REFRESH_TOKEN_KEY)
+}
+
+export function clearSession() {
+  window.localStorage.removeItem(ACCESS_TOKEN_KEY)
+  window.localStorage.removeItem(REFRESH_TOKEN_KEY)
+}

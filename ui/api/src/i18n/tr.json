@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "title": "Velin — Kendi AI Homelab'in"
+  },
+  "common": {
+    "brandTagline": "Kendi AI Homelab'in",
+    "homeLink": "Velin ana sayfa",
+    "home": "Ana sayfa",
+    "logOut": "Çıkış yap",
+    "copyright": "© 2026 Velin"
+  },
+  "home": {
+    "skipToContent": "İçeriğe geç",
+    "nav": {
+      "label": "Ana menü",
+      "howItWorks": "Nasıl çalışır",
+      "infrastructure": "Altyapı",
+      "logIn": "Giriş"
+    },
+    "hero": {
+      "title": "Yapay zekâ sohbetini kendi altyapınızda çalıştırın.",
+      "lede": "Velin; hesapları, API anahtarlarını ve sohbet geçmişini tek yerde toplar. Model çağrıları Ollama üzerinden gider, veriniz sunucunuzdan çıkmaz.",
+      "createAccount": "Hesap oluştur",
+      "howItWorks": "Nasıl çalışır"
+    },
+    "example": {
+      "label": "Örnek API isteği ve yanıtı",
+      "response": "yanıt",
+      "message": "Merhaba",
+      "answer": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "hiddenAnswer": "Örnek yanıt: {answer}"
+    },
+    "steps": {
+      "title": "Üç adımda ilk yanıt",
+      "lede": "Hesabınızı açın, bir anahtar üretin ve ilk mesajınızı gönderin.",
+      "oneTitle": "Hesap oluşturun",
+      "oneBody": "Kullanıcı adı ve parolanızı belirleyin. Oturumlar kısa ömürlü JWT ile, yenileme jetonları ayrı olarak yönetilir.",
+      "twoTitle": "API anahtarı üretin",
+      "twoBody": "Canlı veya test ortamı için bir anahtar oluşturun. Anahtar yalnızca bir kez gösterilir; veritabanında SHA-256 özeti saklanır.",
+      "threeTitle": "Mesaj gönderin",
+      "threeBody": "Sohbeti açın ve mesajınızı gönderin. Son 20 mesaj bağlam olarak modele iletilir, yanıt sohbet geçmişine kaydedilir."
+    },
+    "infrastructure": {
+      "title": "Veriniz sizin sunucunuzda kalır.",
+      "body": "Mesajlar PostgreSQL'de saklanır, model çağrıları doğrudan sunucunuzdaki Ollama'ya gider. Her istek yalnızca kendi sohbetinizin geçmişini taşır; başka bir hesabın verisine erişilemez.",
+      "specs": {
+        "server": "Sunucu",
+        "data": "Veri",
+        "model": "Model",
+        "identity": "Kimlik",
+        "identityValue": "JWT ve API anahtarı"
+      }
+    },
+    "footerNote": "Kendi AI Homelab'in."
+  },
+  "auth": {
+    "tagline": "Kendi AI Homelab'in",
+    "note": "Hesaplar, API anahtarları ve sohbet geçmişi tek yerde. Veriniz kendi sunucunuzda kalır.",
+    "specs": {
+      "session": "Oturum",
+      "sessionValue": "JWT, 30 dakika",
+      "refresh": "Yenileme",
+      "refreshValue": "30 gün",
+      "key": "API anahtarı"
+    },
+    "login": {
+      "title": "Tekrar hoş geldiniz.",
+      "lede": "Hesabınıza giriş yapın; API anahtarlarınız ve sohbetleriniz sizi bekliyor.",
+      "notice": "Hesabınız oluşturuldu. Şimdi giriş yapabilirsiniz.",
+      "switchText": "Hesabınız yok mu?",
+      "switchLink": "Hesap oluşturun"
+    },
+    "register": {
+      "title": "Hesabınızı oluşturun.",
+      "lede": "İlk API anahtarınızı üretmek için bir hesap açın. Kurulum gerekmez.",
+      "switchText": "Zaten hesabınız var mı?",
+      "switchLink": "Giriş yapın"
+    },
+    "form": {
+      "username": "Kullanıcı adı",
+      "password": "Parola",
+      "show": "Göster",
+      "hide": "Gizle",
+      "showPassword": "Parolayı göster",
+      "hidePassword": "Parolayı gizle",
+      "loginSubmit": "Giriş yap",
+      "loginLoading": "Giriş yapılıyor…",
+      "registerSubmit": "Hesap oluştur",
+      "registerLoading": "Hesap oluşturuluyor…",
+      "loginSecurity": "Oturumlar kısa ömürlü JWT ile korunur.",
+      "registerSecurity": "Parolanız bcrypt ile hash'lenir; düz metin olarak saklanmaz.",
+      "errors": {
+        "invalidCredentials": "Kullanıcı adı veya parola hatalı.",
+        "required": "Kullanıcı adı ve parola gerekli.",
+        "loginFailed": "Giriş yapılamadı. Lütfen tekrar deneyin.",
+        "userExists": "Bu kullanıcı adı zaten kullanılıyor.",
+        "usernameTooLong": "Kullanıcı adı en fazla 20 karakter olabilir.",
+        "registerFailed": "Kayıt tamamlanamadı. Lütfen tekrar deneyin.",
+        "serverUnreachable": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin."
+      }
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "label": "Dashboard menüsü",
+      "overview": "Genel bakış",
+      "apiKeys": "API Keys",
+      "settings": "Ayarlar"
+    },
+    "overview": {
+      "title": "Genel bakış",
+      "lede": "Oturumunuz açık. API anahtarlarınızı ve sohbetlerinizi bu panelden yöneteceksiniz.",
+      "action": "API anahtarlarını yönet",
+      "specs": {
+        "session": "Oturum",
+        "sessionValue": "JWT, 30 dakika",
+        "refresh": "Yenileme",
+        "refreshValue": "30 gün",
+        "storage": "Saklama",
+        "storageValue": "Bu tarayıcıda"
+      }
+    },
+    "apiKeys": {
+      "title": "API anahtarları",
+      "lede": "Sohbet API'sine erişmek için anahtar oluşturun. Anahtar, yalnızca oluşturulduğu anda bir kez gösterilir.",
+      "form": {
+        "title": "Başlık",
+        "titlePlaceholder": "Üretim sunucusu",
+        "expires": "Bitiş (isteğe bağlı)",
+        "submit": "Anahtar oluştur",
+        "submitting": "Oluşturuluyor…"
+      },
+      "errors": {
+        "titleRequired": "Anahtar için bir başlık girin.",
+        "titleExists": "Bu başlıkta bir anahtar zaten var.",
+        "invalidInput": "Başlık veya bitiş tarihini kontrol edin.",
+        "createFailed": "Anahtar oluşturulamadı. Tekrar deneyin.",
+        "serverUnreachable": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin.",
+        "loadFailed": "Anahtarlar yüklenemedi. Tekrar deneyin."
+      },
+      "reveal": {
+        "title": "Yeni anahtar oluşturuldu",
+        "note": "Bu anahtarı şimdi kopyalayın. Bir daha gösterilmeyecek.",
+        "close": "Kapat",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı"
+      },
+      "list": {
+        "loading": "Anahtarlar yükleniyor…",
+        "empty": "Henüz anahtar yok. İlk anahtarınızı yukarıdan oluşturun.",
+        "retry": "Tekrar dene",
+        "active": "Etkin",
+        "expired": "Süresi doldu",
+        "meta": "Oluşturuldu {created}, bitiş {expires}",
+        "metaNoExpiry": "Oluşturuldu {created}, süresiz"
+      }
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "lede": "Velin'in sizin için nasıl çalışacağını yönetin.",
+      "language": {
+        "title": "Dil",
+        "description": "Arayüzde kullanılacak dili seçin.",
+        "en": "English",
+        "tr": "Türkçe"
+      }
+    }
+  }
+}

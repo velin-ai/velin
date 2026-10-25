@@ -1,43 +1,45 @@
 import { useState, type FormEvent } from 'react'
+import { useI18n } from '../i18n/context'
 import { loginUser, registerUser } from '../lib/auth'
 
 type AuthFormProps = {
   mode: 'login' | 'register'
 }
 
-function errorMessage(
+function errorKey(
   mode: AuthFormProps['mode'],
   status: number,
   code?: string,
 ) {
   if (mode === 'login') {
     if (status === 401) {
-      return 'Kullanıcı adı veya parola hatalı.'
+      return 'auth.form.errors.invalidCredentials'
     }
 
     if (status === 400) {
-      return 'Kullanıcı adı ve parola gerekli.'
+      return 'auth.form.errors.required'
     }
 
-    return 'Giriş yapılamadı. Lütfen tekrar deneyin.'
+    return 'auth.form.errors.loginFailed'
   }
 
   if (status === 409) {
-    return 'Bu kullanıcı adı zaten kullanılıyor.'
+    return 'auth.form.errors.userExists'
   }
 
   if (status === 400) {
     if (code === 'username_too_long') {
-      return 'Kullanıcı adı en fazla 20 karakter olabilir.'
+      return 'auth.form.errors.usernameTooLong'
     }
 
-    return 'Kullanıcı adı ve parola gerekli.'
+    return 'auth.form.errors.required'
   }
 
-  return 'Kayıt tamamlanamadı. Lütfen tekrar deneyin.'
+  return 'auth.form.errors.registerFailed'
 }
 
 function AuthForm({ mode }: AuthFormProps) {
+  const { t } = useI18n()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -45,6 +47,12 @@ function AuthForm({ mode }: AuthFormProps) {
   const [loading, setLoading] = useState(false)
 
   const isLogin = mode === 'login'
+  const submitLabel = isLogin
+    ? t('auth.form.loginSubmit')
+    : t('auth.form.registerSubmit')
+  const loadingLabel = isLogin
+    ? t('auth.form.loginLoading')
+    : t('auth.form.registerLoading')
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -57,8 +65,13 @@ function AuthForm({ mode }: AuthFormProps) {
         ? await loginUser(username.trim(), password)
         : await registerUser(username.trim(), password)
 
-      if (isLogin && result.status === 200) {
-        window.location.assign('/')
+      if (
+        isLogin &&
+        result.status === 200 &&
+        result.accessToken &&
+        result.refreshToken
+      ) {
+        window.location.assign('/dashboard')
 
         return
       }
@@ -69,9 +82,9 @@ function AuthForm({ mode }: AuthFormProps) {
         return
       }
 
-      setError(errorMessage(mode, result.status, result.error))
+      setError(t(errorKey(mode, result.status, result.error)))
     } catch {
-      setError('Sunucuya ulaşılamadı. Bağlantınızı kontrol edin.')
+      setError(t('auth.form.errors.serverUnreachable'))
     } finally {
       setLoading(false)
     }
@@ -80,7 +93,7 @@ function AuthForm({ mode }: AuthFormProps) {
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
       <div className="auth-field">
-        <label htmlFor="username">Kullanıcı adı</label>
+        <label htmlFor="username">{t('auth.form.username')}</label>
         <input
           id="username"
           name="username"
@@ -98,7 +111,7 @@ function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       <div className="auth-field">
-        <label htmlFor="password">Parola</label>
+        <label htmlFor="password">{t('auth.form.password')}</label>
 
         <div className="auth-password">
           <input
@@ -116,12 +129,14 @@ function AuthForm({ mode }: AuthFormProps) {
             className="auth-reveal"
             type="button"
             aria-label={
-              showPassword ? 'Parolayı gizle' : 'Parolayı göster'
+              showPassword
+                ? t('auth.form.hidePassword')
+                : t('auth.form.showPassword')
             }
             aria-pressed={showPassword}
             onClick={() => setShowPassword((visible) => !visible)}
           >
-            {showPassword ? 'Gizle' : 'Göster'}
+            {showPassword ? t('auth.form.hide') : t('auth.form.show')}
           </button>
         </div>
       </div>
@@ -133,19 +148,13 @@ function AuthForm({ mode }: AuthFormProps) {
       ) : null}
 
       <button className="auth-submit" type="submit" disabled={loading}>
-        {loading
-          ? isLogin
-            ? 'Giriş yapılıyor…'
-            : 'Hesap oluşturuluyor…'
-          : isLogin
-            ? 'Giriş yap'
-            : 'Hesap oluştur'}
+        {loading ? loadingLabel : submitLabel}
       </button>
 
       <p className="auth-security">
         {isLogin
-          ? 'Oturumlar kısa ömürlü JWT ile korunur.'
-          : "Parolanız bcrypt ile hash'lenir; düz metin olarak saklanmaz."}
+          ? t('auth.form.loginSecurity')
+          : t('auth.form.registerSecurity')}
       </p>
     </form>
   )

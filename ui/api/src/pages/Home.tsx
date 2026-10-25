@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import { useI18n } from '../i18n/context'
 import '../App.css'
-
-const fullAnswer = 'Merhaba! Size nasıl yardımcı olabilirim?'
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-function Home() {
+type TypedAnswerProps = {
+  answer: string
+  hiddenAnswer: string
+}
+
+function TypedAnswer({ answer, hiddenAnswer }: TypedAnswerProps) {
   const [typedAnswer, setTypedAnswer] = useState(() =>
-    prefersReducedMotion() ? fullAnswer : '',
+    prefersReducedMotion() ? answer : '',
   )
 
   useEffect(() => {
@@ -21,27 +25,45 @@ function Home() {
 
     const timer = window.setInterval(() => {
       index += 1
-      setTypedAnswer(fullAnswer.slice(0, index))
+      setTypedAnswer(answer.slice(0, index))
 
-      if (index >= fullAnswer.length) {
+      if (index >= answer.length) {
         window.clearInterval(timer)
       }
     }, 42)
 
     return () => window.clearInterval(timer)
-  }, [])
+  }, [answer])
 
-  const isTyping = typedAnswer.length < fullAnswer.length
+  const isTyping = typedAnswer.length < answer.length
+
+  return (
+    <>
+      <p className="response-text" aria-hidden="true">
+        {typedAnswer}
+        <span
+          className={isTyping ? 'caret' : 'caret is-hidden'}
+          aria-hidden="true"
+        />
+      </p>
+      <p className="visually-hidden">{hiddenAnswer}</p>
+    </>
+  )
+}
+
+function Home() {
+  const { t, language } = useI18n()
+  const answer = t('home.example.answer')
 
   return (
     <div className="page">
       <a className="skip-link" href="#main">
-        İçeriğe geç
+        {t('home.skipToContent')}
       </a>
 
       <header className="site-header">
         <div className="wrap">
-          <a className="brand" href="/" aria-label="Velin ana sayfa">
+          <a className="brand" href="/" aria-label={t('common.homeLink')}>
             <img
               className="brand-mark"
               src="/logo.svg"
@@ -51,14 +73,14 @@ function Home() {
             />
             <span className="brand-name">velin</span>
             <span className="brand-divider" aria-hidden="true" />
-            <span className="brand-tagline">Kendi AI Homelab'in</span>
+            <span className="brand-tagline">{t('common.brandTagline')}</span>
           </a>
 
-          <nav className="site-nav" aria-label="Ana menü">
-            <a href="#nasil-calisir">Nasıl çalışır</a>
-            <a href="#altyapi">Altyapı</a>
+          <nav className="site-nav" aria-label={t('home.nav.label')}>
+            <a href="#nasil-calisir">{t('home.nav.howItWorks')}</a>
+            <a href="#altyapi">{t('home.nav.infrastructure')}</a>
             <a className="nav-login" href="/login">
-              Giriş
+              {t('home.nav.logIn')}
             </a>
           </nav>
         </div>
@@ -68,27 +90,21 @@ function Home() {
         <section className="hero" aria-labelledby="hero-title">
           <div className="wrap">
             <div className="hero-copy">
-              <h1 id="hero-title">
-                Yapay zekâ sohbetini kendi altyapınızda çalıştırın.
-              </h1>
+              <h1 id="hero-title">{t('home.hero.title')}</h1>
 
-              <p className="hero-lede">
-                Velin; hesapları, API anahtarlarını ve sohbet geçmişini tek
-                yerde toplar. Model çağrıları Ollama üzerinden gider, veriniz
-                sunucunuzdan çıkmaz.
-              </p>
+              <p className="hero-lede">{t('home.hero.lede')}</p>
 
               <div className="hero-actions">
                 <a className="button" href="/register">
-                  Hesap oluştur
+                  {t('home.hero.createAccount')}
                 </a>
                 <a className="text-link" href="#nasil-calisir">
-                  Nasıl çalışır
+                  {t('home.hero.howItWorks')}
                 </a>
               </div>
             </div>
 
-            <figure className="request" aria-label="Örnek API isteği ve yanıtı">
+            <figure className="request" aria-label={t('home.example.label')}>
               <div className="request-bar">
                 <span className="request-method">POST</span>
                 <span className="request-path">
@@ -114,8 +130,9 @@ function Home() {
                     <span className="json-string">"llama3.1"</span>
                     {',\n  '}
                     <span className="json-key">"content"</span>
-                    {': '}
-                    <span className="json-string">"Merhaba"</span>
+                    {': "'}
+                    {t('home.example.message')}
+                    {'"'}
                     {'\n}'}
                   </code>
                 </pre>
@@ -123,57 +140,46 @@ function Home() {
 
               <div className="response">
                 <div className="response-head">
-                  <span>yanıt</span>
+                  <span>{t('home.example.response')}</span>
                   <span className="status">200</span>
                 </div>
 
-                <p className="response-text" aria-hidden="true">
-                  {typedAnswer}
-                  <span
-                    className={isTyping ? 'caret' : 'caret is-hidden'}
-                    aria-hidden="true"
-                  />
-                </p>
-                <p className="visually-hidden">Örnek yanıt: {fullAnswer}</p>
+                <TypedAnswer
+                  key={language}
+                  answer={answer}
+                  hiddenAnswer={t('home.example.hiddenAnswer', { answer })}
+                />
               </div>
             </figure>
           </div>
         </section>
 
-        <section className="steps" id="nasil-calisir" aria-labelledby="steps-title">
+        <section
+          className="steps"
+          id="nasil-calisir"
+          aria-labelledby="steps-title"
+        >
           <div className="wrap">
             <div className="section-head">
-              <h2 id="steps-title">Üç adımda ilk yanıt</h2>
-              <p>
-                Hesabınızı açın, bir anahtar üretin ve ilk mesajınızı gönderin.
-              </p>
+              <h2 id="steps-title">{t('home.steps.title')}</h2>
+              <p>{t('home.steps.lede')}</p>
             </div>
 
             <ol className="step-list">
               <li>
                 <span className="step-number">01</span>
-                <h3>Hesap oluşturun</h3>
-                <p>
-                  Kullanıcı adı ve parolanızı belirleyin. Oturumlar kısa ömürlü
-                  JWT ile, yenileme jetonları ayrı olarak yönetilir.
-                </p>
+                <h3>{t('home.steps.oneTitle')}</h3>
+                <p>{t('home.steps.oneBody')}</p>
               </li>
               <li>
                 <span className="step-number">02</span>
-                <h3>API anahtarı üretin</h3>
-                <p>
-                  Canlı veya test ortamı için bir anahtar oluşturun. Anahtar
-                  yalnızca bir kez gösterilir; veritabanında SHA-256 özeti
-                  saklanır.
-                </p>
+                <h3>{t('home.steps.twoTitle')}</h3>
+                <p>{t('home.steps.twoBody')}</p>
               </li>
               <li>
                 <span className="step-number">03</span>
-                <h3>Mesaj gönderin</h3>
-                <p>
-                  Sohbeti açın ve mesajınızı gönderin. Son 20 mesaj bağlam olarak
-                  modele iletilir, yanıt sohbet geçmişine kaydedilir.
-                </p>
+                <h3>{t('home.steps.threeTitle')}</h3>
+                <p>{t('home.steps.threeBody')}</p>
               </li>
             </ol>
           </div>
@@ -186,31 +192,26 @@ function Home() {
         >
           <div className="wrap">
             <div className="infra-copy">
-              <h2 id="infra-title">Veriniz sizin sunucunuzda kalır.</h2>
-              <p>
-                Mesajlar PostgreSQL'de saklanır, model çağrıları doğrudan
-                sunucunuzdaki Ollama'ya gider. Her istek yalnızca kendi
-                sohbetinizin geçmişini taşır; başka bir hesabın verisine
-                erişilemez.
-              </p>
+              <h2 id="infra-title">{t('home.infrastructure.title')}</h2>
+              <p>{t('home.infrastructure.body')}</p>
             </div>
 
             <dl className="spec-list">
               <div>
-                <dt>Sunucu</dt>
+                <dt>{t('home.infrastructure.specs.server')}</dt>
                 <dd>Go</dd>
               </div>
               <div>
-                <dt>Veri</dt>
+                <dt>{t('home.infrastructure.specs.data')}</dt>
                 <dd>PostgreSQL</dd>
               </div>
               <div>
-                <dt>Model</dt>
+                <dt>{t('home.infrastructure.specs.model')}</dt>
                 <dd>Ollama</dd>
               </div>
               <div>
-                <dt>Kimlik</dt>
-                <dd>JWT ve API anahtarı</dd>
+                <dt>{t('home.infrastructure.specs.identity')}</dt>
+                <dd>{t('home.infrastructure.specs.identityValue')}</dd>
               </div>
             </dl>
           </div>
@@ -223,8 +224,8 @@ function Home() {
             <img src="/logo.svg" alt="" width="26" height="26" />
             <span>velin</span>
           </div>
-          <p className="footer-note">Kendi AI Homelab'in.</p>
-          <p className="footer-copy">© 2026 Velin</p>
+          <p className="footer-note">{t('home.footerNote')}</p>
+          <p className="footer-copy">{t('common.copyright')}</p>
         </div>
       </footer>
     </div>

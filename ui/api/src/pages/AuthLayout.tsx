@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useI18n } from '../i18n/context'
 import './auth.css'
 
 type AuthLayoutProps = {
@@ -16,38 +17,37 @@ function AuthLayout({
   children,
   footer,
 }: AuthLayoutProps) {
+  const { t } = useI18n()
+
   return (
     <div className="auth-page">
       <aside className="auth-intro">
-        <a className="auth-brand" href="/" aria-label="Velin ana sayfa">
+        <a className="auth-brand" href="/" aria-label={t('common.homeLink')}>
           <img src="/logo.svg" alt="" width="36" height="36" />
           <span>velin</span>
         </a>
 
         <div className="auth-intro-body">
-          <p className="auth-tagline">Kendi AI Homelab'in</p>
-          <p className="auth-note">
-            Hesaplar, API anahtarları ve sohbet geçmişi tek yerde. Veriniz kendi
-            sunucunuzda kalır.
-          </p>
+          <p className="auth-tagline">{t('auth.tagline')}</p>
+          <p className="auth-note">{t('auth.note')}</p>
 
           <dl className="auth-specs">
             <div>
-              <dt>Oturum</dt>
-              <dd>JWT, 30 dakika</dd>
+              <dt>{t('auth.specs.session')}</dt>
+              <dd>{t('auth.specs.sessionValue')}</dd>
             </div>
             <div>
-              <dt>Yenileme</dt>
-              <dd>30 gün</dd>
+              <dt>{t('auth.specs.refresh')}</dt>
+              <dd>{t('auth.specs.refreshValue')}</dd>
             </div>
             <div>
-              <dt>API anahtarı</dt>
+              <dt>{t('auth.specs.key')}</dt>
               <dd>SHA-256</dd>
             </div>
           </dl>
         </div>
 
-        <p className="auth-copyright">© 2026 Velin</p>
+        <p className="auth-copyright">{t('common.copyright')}</p>
       </aside>
 
       <main className="auth-panel">
