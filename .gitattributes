@@ -1,0 +1,6 @@
+# Keep generated frontend bundles out of GitHub language statistics.
+ui/api/dist/** linguist-generated=true linguist-detectable=false
+
+# The HTML entry point and stylesheets are not counted as project languages.
+*.html linguist-detectable=false
+*.css linguist-detectable=false
