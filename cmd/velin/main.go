@@ -4,9 +4,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"path"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/velin-ai/velin/internal/admin/config"
@@ -15,6 +18,7 @@ import (
 	"github.com/velin-ai/velin/internal/api/handlers/chat"
 	"github.com/velin-ai/velin/internal/api/middlewares"
 	"github.com/velin-ai/velin/internal/store"
+	ui "github.com/velin-ai/velin/ui/api"
 	"github.com/zalando/go-keyring"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/term"
@@ -153,6 +157,13 @@ func main() {
 	fmt.Println("API port:", *apiPort)
 	fmt.Println("Admin port:", *adminPort)
 
+	// embedded frontend
+	uiFS, err := fs.Sub(ui.Dist, "dist")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// api router
 	apiRouter := chi.NewRouter()
 
@@ -202,6 +213,10 @@ func main() {
 		)
 	})
 
+	// serve the embedded frontend at / and as a fallback for client routes
+	apiRouter.Get("/", serveSPA(uiFS))
+	apiRouter.Handle("/*", serveSPA(uiFS))
+
 	apiServer := &http.Server{
 		Addr:    fmt.Sprintf("%s%s", "0.0.0.0", *apiPort),
 		Handler: apiRouter,
@@ -214,6 +229,30 @@ func main() {
 
 	if err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
+	}
+}
+
+func serveSPA(staticFS fs.FS) http.HandlerFunc {
+	fileServer := http.FileServer(http.FS(staticFS))
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		filePath := strings.TrimPrefix(path.Clean(r.URL.Path), "/")
+
+		if filePath == "" || filePath == "." {
+			http.ServeFileFS(w, r, staticFS, "index.html")
+
+			return
+		}
+
+		info, err := fs.Stat(staticFS, filePath)
+
+		if err != nil || info.IsDir() {
+			http.ServeFileFS(w, r, staticFS, "index.html")
+
+			return
+		}
+
+		fileServer.ServeHTTP(w, r)
 	}
 }
 
