@@ -12,6 +12,7 @@ import (
 	"github.com/velin-ai/velin/internal/admin/config"
 	apikey "github.com/velin-ai/velin/internal/api/handlers/api_key"
 	"github.com/velin-ai/velin/internal/api/handlers/auth"
+	"github.com/velin-ai/velin/internal/api/handlers/chat"
 	"github.com/velin-ai/velin/internal/api/middlewares"
 	"github.com/velin-ai/velin/internal/store"
 	"github.com/zalando/go-keyring"
@@ -178,6 +179,27 @@ func main() {
 		).Get(
 			"/api-keys", apikey.ListMyAPIKeys,
 		)
+
+		// POST /api/v1/chats
+		r.With(
+			middlewares.Auth,
+		).Post(
+			"/chats", chat.CreateNewChat,
+		)
+
+		// GET /api/v1/chats
+		r.With(
+			middlewares.Auth,
+		).Get(
+			"/chats", chat.ListMyChats,
+		)
+
+		// POST /api/v1/chats/{chat_id}/messages
+		r.With(
+			middlewares.APIKeyAuth,
+		).Post(
+			"/chats/{chat_id}/messages", chat.ChatMessage,
+		)
 	})
 
 	apiServer := &http.Server{
@@ -186,14 +208,13 @@ func main() {
 	}
 
 	// start api server
-	go func() {
-		log.Printf("API server is listening on %s", *apiPort)
-		err := apiServer.ListenAndServe()
 
-		if err != nil && err != http.ErrServerClosed {
-			log.Fatal(err)
-		}
-	}()
+	log.Printf("API server is listening on %s", *apiPort)
+	err = apiServer.ListenAndServe()
+
+	if err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
 }
 
 func flagWasProvided(name string) bool {

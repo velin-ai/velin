@@ -237,9 +237,10 @@ func LoginHandler(
 		return
 	}
 
-	accessToken, err := access.SignedString(secret)
+	accessToken, err := access.SignedString([]byte(secret))
 
 	if err != nil {
+
 		w.WriteHeader(500)
 
 		json.NewEncoder(w).Encode(map[string]any{
